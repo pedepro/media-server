@@ -47,7 +47,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.status(400).json({ error: 'Nenhum arquivo enviado' });
   }
 
-  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  // Forçar HTTPS na URL retornada
+  const fileUrl = `https://${req.get('host')}/uploads/${req.file.filename}`;
   console.log('URL gerada para o arquivo:', fileUrl);
   res.json({ url: fileUrl });
 });
@@ -63,7 +64,8 @@ app.get('/files', (req, res) => {
       return res.status(500).json({ error: 'Erro ao listar arquivos' });
     }
     console.log('Arquivos encontrados:', files);
-    const fileUrls = files.map(file => `${req.protocol}://${req.get('host')}/uploads/${file}`);
+    // Forçar HTTPS nas URLs retornadas
+    const fileUrls = files.map(file => `https://${req.get('host')}/uploads/${file}`);
     console.log('URLs retornadas:', fileUrls);
     res.json(fileUrls);
   });
